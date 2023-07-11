@@ -1,0 +1,265 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Panel</title>
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/media.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/font-awesome.min.css" />
+    <%--<link href="css/style.css" rel="stylesheet" />--%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="~/assests/bootstrap-datepicker-master/dist/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
+
+
+
+    <script src="../vendor/jquery-ui/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+
+    <script src="../Scripts/notify.min.js"></script>
+    <link href="~/assests/select2/select2.css" rel="stylesheet" />
+    <link href="~/assests/select2/select2-bootstrap.css" rel="stylesheet" />
+
+    <link href="~/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/fixedColumns.dataTables.min.css" rel="stylesheet" />
+    <script src="../js/jquery.dataTables.min.js"></script>
+    <script src="../js/dataTables.fixedColumns.min.js"></script>
+    <script src="../js/dataTables.bootstrap.min.js"></script>
+    <script src="../js/CommonTable.js"></script>
+
+    <link href="~/styles/bootstrap-timepicker.min.css" rel="stylesheet" />
+    <script src="../Scripts/bootstrap-timepicker.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script>
+        function ActiveMenu(id) {
+            var element = $('#ModuleCode_' + id);
+            $(element).addClass('active');
+            $(element).parent().parent().find('ul').addClass('in');
+        }
+    </script>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body class="nav-md" onload="load()">
+    <script>
+        function toDataTable() {
+            var path = window.location.pathname;
+            var page = path.split("/").pop();
+            if (!page.includes("Dashboard") && !page.includes("SetMonthlySalarySD") && !page.includes("AttendanceAnalysis") && !page.includes("ExemptEmployees") && !page.includes("ReduceSalaryEmployees") && !page.includes("ApprovePendingLeaveSDNew") && !page.includes("ApplyLeaveSDNew") && !page.includes("ApplyAcademicLeavePreviousSession")) {
+                $('#form1 table').each(function () {
+                    if (this.id != '') {
+                        const allClassNames = $('#' + this.id).attr("class");
+
+                        if (allClassNames.includes('noExcelTable')) {
+                            GridViewToDataTableWithoutExcel(this.id);
+                        }
+                        else {
+                            GridViewToDataTable(this.id);
+                        }
+                    }
+                });
+            }
+        }
+        function LoadElements() {
+            $("select.chosen").select2();
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true
+            });
+
+            $('.timepicker').timepicker({
+                format: 'LT',
+                defaultTime: false
+            });
+
+            $('.date-picker').datepicker({
+                format: 'mm/dd/yyyy',
+                autoclose: true
+            });
+            $('input.reportrange').daterangepicker({
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                "alwaysShowCalendars": true,
+                locale: {
+                    format: 'DD/MM/YYYY'
+                }
+            });
+            toDataTable();
+        }
+
+        function load() {
+            LoadElements();
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(LoadElements);
+        }
+    </script>
+
+    <form id="form1" runat="server">
+        <div>
+            <div class="container body">
+                <div class="main_container">
+                    <div class="col-md-3 left_col">
+                        <div class="left_col scroll-view">
+
+                            <div class="profile clearfix">
+                                <div class="profile_pic">
+                                    <img src="../images/DefaultPhoto.jpg" alt="DefaultPhoto" class="img-circle profile_img" />
+                                </div>
+                                <div class="profile_info">
+                                    <span>Welcome,</span>
+                                    <h2>
+                                        <asp:Literal ID="litName" runat="server"></asp:Literal></h2>
+                                </div>
+                            </div>
+
+                            <!-- sidebar menu -->
+                            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                                <div class="menu_section">
+                                    <ul class="nav side-menu">
+                                        <asp:Literal runat="server" ID="litMenu"></asp:Literal>
+                                    </ul>
+                                </div>
+
+                            </div>
+                            <!-- /sidebar menu -->
+
+                        </div>
+                    </div>
+
+                    <!-- top navigation -->
+                    <div class="top_nav navbar-fixed-top">
+                        <div class="nav_menu">
+                            <nav>
+
+                                <div id="menu_toggle" class="nav toggle" onclick="myFunction(this)">
+                                    <div class="bar1"></div>
+                                    <div class="bar2"></div>
+                                    <div class="bar3"></div>
+                                </div>
+
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li>
+                                        <asp:LinkButton runat="server" ID="btnLogOut" OnClick="btnLogOut_Click"><i class="fa fa-sign-out"></i></asp:LinkButton>
+                                    </li>
+                                    <%--<li role="presentation" class="dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-list"></i>
+                                        </a>
+                                        <ul id="menu1" class="dropdown-menu dropdown-usermenu pull-right" role="menu">
+                                            <li><a href="#">DAM</a></li>
+                                            <li><a href="#">CMS</a></li>
+                                            <li><a href="#">Home</a></li>
+                                            <li><a href="#">Registrar Desk</a></li>
+                                        </ul>
+                                    </li>--%>
+
+                                    <!-- 1 -->
+                                    <li role="presentation" class="dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-gift"></i>
+                                            <%--<span class="badge bg-red">4</span>--%>
+                                             <span class="label label-success" id="BithdayCount">0</span>
+                                        </a>
+                                       <%-- <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                            <li><a>ABHISEKH : B.Tech CSE III Sem Sec-A</a></li>
+                                            <li><a>ANANYA  DUA : B.Ed. I Year</a></li>
+                                            <li><a>PRINTY : B.Ed. I Year</a></li>
+                                            <li><a>TAMANNA : B.Tech I Sem Sec C</a></li>
+
+                                        </ul>--%>
+                                         <ul class="dropdown-menu hdropdown animated flipInX" id="liBirthday"></ul>
+                                    </li>
+                                     <%--<li role="presentation" class="dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-gift"></i>
+                                            <span class="badge bg-red" id="BithdayCount">0</span>
+                                        </a>
+                                         <ul class="dropdown-menu hdropdown animated flipInX" id="liBirthday"></ul>
+                                    </li>--%>
+                                    <!-- 2 -->
+                                    <li role="presentation" class="dropdown">
+                                        <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa fa-bell-o"></i>
+                                            <%--<span class="badge bg-red">2</span>--%>
+                                            <span class="label label-success" id="NotificationCount">0</span>
+                                        </a>
+                                        <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                           <%-- <li><a href="#"><span class="label label-info">1</span> Leaves Pending For Approval</a></li>
+                                            <li><a href="#"><span class="label label-info">2</span> Redeem Leaves Request</a></li>--%>
+                                             <ul class="dropdown-menu hdropdown animated flipInX" id="liNotifications"></ul>
+                                        </ul>
+                                    </li>
+
+                                </ul>
+
+                            </nav>
+                        </div>
+                    </div>
+                    <!-- /top navigation -->
+                    <!-- page content -->
+                    <div class="right_col" role="main">
+
+                        <div class="normalheader  small-header">
+                            <div class="hpanel">
+                                <div class="panel-body">
+                                    <div id="hbreadcrumb" class="hidden-xs">
+                                        <ol class="breadcrumb mt-4">
+                                            <asp:Literal runat="server" ID="litCurrentPath"></asp:Literal>
+                                        </ol>
+                                    </div>
+                                    <%--<h2 class="font-light m-b-xs">
+                                        <asp:Label runat="server" ID="lblCurrentPageName"></asp:Label>
+                                    </h2>--%>
+                                </div>
+                            </div>
+                        </div>
+                        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                        </asp:ContentPlaceHolder>
+
+                        <footer class="footer">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6 col-6 text-left">Samphire IT Solutions</div>
+                                    <div class="col-md-6 col-xs-6 col-6 text-right">Sits_HRM</div>
+                                </div>
+                            </div>
+                        </footer>
+
+                    </div>
+                </div>
+
+
+
+                <!-- /page content -->
+
+            </div>
+
+
+        </div>
+    </form>
+
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../assests/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="../assests/select2/select2.min.js"></script>
+
+    <script>
+        $('.menu_section > ul > li').on('click', function () {
+            $('.menu_section > ul > li').removeClass('activeRound');
+
+        });
+    </script>
+</body>
+</html>

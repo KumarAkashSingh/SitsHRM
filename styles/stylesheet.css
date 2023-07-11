@@ -1,0 +1,89 @@
+body{margin: 0; padding: 0; font-family: 'Poppins', sans-serif;}
+.form-sec{background:url(../../images/bg-01.jpg) no-repeat center; background-size:cover; height:100vh;}
+.bg-white{background: #fff; padding:30px; margin-top:120px; border-radius:5px;}
+.input-group {margin-bottom: 15px;}
+img.brand_logo {margin-bottom: 30px;}
+ 
+.form-control{font-size: 15px;}
+.custom-control-label{font-size: 14px;}
+.login_btn {width: 100%;background: #001b54 !important;color: white !important;}
+.login_btn:focus {box-shadow: none !important;outline: 0px !important;}
+.login_container {padding: 0 2rem;}
+.input-group-text {background: #001b54 !important;color: white !important;border: 0 !important;border-radius: 0.25rem 0 0 0.25rem !important;width:40px;}
+.input_user,
+.form-control,
+.input_pass:focus {box-shadow: none !important;outline: 0px !important;}
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before {background-color: #001b54 !important;}
+#register, 
+#login{
+	position: absolute;
+	top:120px;
+	width:100%;	
+	padding:30px;
+	margin:0;
+	background:#fff;
+    border-radius: 5px;
+}
+#register{	
+	z-index: 21;
+	opacity: 0;
+}
+#login{
+	z-index: 22;
+}
+#toregister:target ~ #forms #register,
+#tologin:target ~ #forms #login{
+	z-index: 22;
+	-webkit-animation-name: fadeInLeft;
+	-moz-animation-name: fadeInLeft;
+	-ms-animation-name: fadeInLeft;
+	-o-animation-name: fadeInLeft;
+	animation-name: fadeInLeft;
+	-webkit-animation-delay: .1s;
+	-moz-animation-delay: .1s;
+	-o-animation-delay: .1s;
+	-ms-animation-delay: .1s;
+	animation-delay: .1s;
+}
+#toregister:target ~ #forms #login,
+#tologin:target ~ #forms #register{
+	-webkit-animation-name: fadeOutLeft;
+	-moz-animation-name: fadeOutLeft;
+	-ms-animation-name: fadeOutLeft;
+	-o-animation-name: fadeOutLeft;
+	animation-name: fadeOutLeft;
+}
+
+/** the actual animation, credit where due : http://daneden.me/animate/ ***/
+.animate{
+	-webkit-animation-duration: 0.5s;
+	-webkit-animation-timing-function: ease;
+	-webkit-animation-fill-mode: both;
+	
+	-moz-animation-duration: 0.5s;
+	-moz-animation-timing-function: ease;
+	-moz-animation-fill-mode: both;
+	
+	-o-animation-duration: 0.5s;
+	-o-animation-timing-function: ease;
+	-o-animation-fill-mode: both;
+	
+	-ms-animation-duration: 0.5s;
+	-ms-animation-timing-function: ease;
+	-ms-animation-fill-mode: both;
+	
+	animation-duration: 0.5s;
+	animation-timing-function: ease;
+	animation-fill-mode: both;
+}
+@media only screen and (max-width:769px){
+	.d-flex.justify-content-center.links {font-size: 12px;}
+}
+@media only screen and (max-width:575px){
+	.form-sec{background:#eee;margin: 0; padding: 30px;}
+	#register, #login{top: 0;width:95%;}
+	.d-flex.justify-content-center.links {font-size: 15px;}
+}
+
+
+
